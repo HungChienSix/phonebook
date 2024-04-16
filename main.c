@@ -14,17 +14,14 @@ void fun_delete(void);
 void fun_in_read(void);
 int fun_in_find(char str[]);
 void fun_in_call(char phone[]);
-void fun_in_recompose(int,int);
-void fun_in_delete(int,int);
+void fun_in_recompose(int form_r,int mem_num_r);
+void fun_in_delete(int mem_num_r);
+int fun_in_chose(void);
 
-int number=3;
+int number=3;//文档内储存的联系人个数
 char key='b';
-char call_phone[15];
-char call_home_phone[15];
-char call_office_phone[15];
-int mem_find_num=0;
-int mem_num;
-int swi=0;
+int mem_find_num=0;//查找中符合条件的对象个数
+int mem_num;//符合条件的对象的脚标
 
 struct member
 {
@@ -42,7 +39,7 @@ struct member mem_find[20];
 int main()
 {
     int fun_num;
-    printf("welcome!\n按enter键继续");
+    printf("  welcome!\n按enter键继续");
     getchar();
     fun_in_read();
     system("cls") ;
@@ -50,25 +47,23 @@ int main()
     {
         system("cls") ;
         menu();
-        printf("选择你想实现的功能:_\b\n");
+        printf("选择你想实现的功能:_\b");
         scanf("%d",&fun_num);
         getchar();
 
         switch (fun_num)
         {
-            case 1:fun_call();//拨号
+            case 1:fun_call();//拨号功能
                 break;
-            case 2:fun_view();//查看
+            case 2:fun_view();//查看功能
                 break;
-            case 3:fun_find();//查找
+            case 3:fun_add();//添加功能
                 break;
-            case 4:fun_add();//添加
+            case 4:fun_recompose();//修改功能
                 break;
-            case 5:fun_recompose();
+            case 5:fun_delete();//删除功能
                 break;
-            case 6:fun_delete();
-                break;
-            case 7:key='0';//退出
+            case 6:key='0';//退出
                 break;
             default :printf("输入错误\n");
                 printf("按enter键重新输入");
@@ -83,11 +78,10 @@ void menu(void)
     printf("*****************************\n");
     printf("*********  1.拨号  **********\n");
     printf("*********  2.查看  **********\n");
-    printf("*********  3.查找  **********\n");
-    printf("*********  4.添加  **********\n");
-    printf("*********  5.修改  **********\n");
-    printf("*********  6.删除  **********\n");
-    printf("*********  7.退出  **********\n");
+    printf("*********  3.添加  **********\n");
+    printf("*********  4.修改  **********\n");
+    printf("*********  5.删除  **********\n");
+    printf("*********  6.退出  **********\n");
     printf("*****************************\n");
     printf("*****************************\n");
 }
@@ -96,52 +90,63 @@ void fun_call(void)
 {
     system("cls");
     int form=0;
-    char str[10];
-    system("cls");
-    back:
-    printf("输入你想拨打的电话号码或联系人:_______\b\b\b\b\b");
-    scanf("%s",str);
-    getchar();
-    mem_find_num=fun_in_find(str);
-    if(mem_find_num==0)
-    {
-        printf("查找不到有关信息");
-    }
-    else if(mem_find_num==1)
-    {
-        printf("请选择你要拨打的方式：\n");
-        printf("1.拨打主电话2.拨打家庭电话3.拨打办公电话");
+    printf("请输入将要拨打的联系人信息");
+    fun_in_chose();
+    
+        printf("1.拨打主电话\n2.拨打家庭电话\n3.拨打办公电话\n");
+        printf("请选择你要拨打的方式：");
         scanf("%d",&form);
         getchar();
+        // printf("%d,%d.%s",form,number,mem[mem_num].phonenum);
         if(form==1)
         {
-            fun_in_call(call_phone);
+            fun_in_call(mem[mem_num].phonenum);
         }
         else if(form==2)
         {
-            fun_in_call(call_home_phone);
+            fun_in_call(mem[mem_num].home_phonenum);
         }
         else if(form==3)
         {
-            fun_in_call(call_office_phone);
+            fun_in_call(mem[mem_num].office_phonenum);
         }
-    }
-    else if(mem_find_num>=2)
-    {
-        printf("请输入更为详细的信息，以便我能确定你所拨打的对象");
-        goto back;
-    }
-    printf("输入b返回主界面，");
+    
+    printf("\n输入b返回主界面，按其他键结束应用");
     key=getchar();
     getchar();
 }
 
+int fun_in_chose(void)
+{
+    char arr[20];
+    while(1)
+    {
+    printf("_____\b\b\b\b\b");
+    scanf("%s",arr);
+    getchar();
+    mem_find_num=fun_in_find(arr);
+    if(mem_find_num==0)
+    {
+        printf("未找到对应数据\n");
+    }
+    else if(mem_find_num>=2)
+    {
+        printf("请输入详细信息，以便找到唯一对应数据");
+    }
+    else if(mem_find_num==1)
+    {
+        return mem_num;
+    }
+    }
+}
+
 void fun_in_call(char phone[])
 {
+    system("cls");
     int n=0;
-    for(n=0;phone[n]!='\0';);
+    for(n=0;phone[n]!='\0';n++)
     {
-        printf("%c",&phone[n]);
+        printf("%c",phone[n]);
         Sleep(1000);
     }
     printf("\n拨号中");
@@ -164,30 +169,40 @@ void fun_in_read()
         exit(1);
     } 
     
-    for (num_read = 0; num_read < number; num_read++)
-    {  
         fscanf(fp, "%s\n%s\n%s\n%s\n%s\n%s\n", 
         mem[num_read].name, mem[num_read].phonenum,  
         mem[num_read].home_phonenum, mem[num_read].office_phonenum,  
         mem[num_read].email, mem[num_read].group) ;
-    }  
+    while(!feof(fp))
+    {
+        num_read++;
+        fscanf(fp, "%s\n%s\n%s\n%s\n%s\n%s\n", 
+        mem[num_read].name, mem[num_read].phonenum,  
+        mem[num_read].home_phonenum, mem[num_read].office_phonenum,  
+        mem[num_read].email, mem[num_read].group) ;
+    }
+    number=num_read+1;
      fclose(fp);  
   
 }
   
 void fun_view(void)
 {
+    system("cls");
     int num_view=0;
     fun_in_read();
 
     for (num_view = 0; num_view < number; num_view++) 
     {  
-        printf("%s\n%s\n%s\n%s\n%s\n%s\n",    
+        printf("___________________\n") ;
+        printf("姓名：%s\n电话：%s\n家庭电话：%s\n办公电话：%s\n邮件：%s\n分组：%s\n",    
         mem[num_view].name, mem[num_view].phonenum,  
         mem[num_view].home_phonenum, mem[num_view].office_phonenum,  
-        mem[num_view].email, mem[num_view].group);  
+        mem[num_view].email, mem[num_view].group); 
+        
     }
-    printf("按a键进行查找功能,按c键进行拨号，按b键回到主界面");
+    printf("\n按a键进行查找功能,按c键进行拨号，按b键回到主界面");
+    //printf("%d",number);
     key=getchar();
     getchar();
     if(key=='a')
@@ -196,7 +211,7 @@ void fun_view(void)
     }  
     else if(key=='c')
     {
-        fun_call;
+        fun_call();
     } 
    
 }
@@ -204,16 +219,18 @@ void fun_view(void)
 int fun_in_find(char str[])
 {
     mem_find_num=0;
+    mem_num=0;
     int k=0;
     int n=0;
-    printf("%s",str);
-    int num_find;
+    // printf("%s",str);
+    int num_find=0;
     for(num_find=0;num_find<number;num_find++)
     {
         k=0;
         if(strstr(mem[num_find].name,str)!=0)
         {
-            printf("%s\n%s\n%s\n%s\n%s\n%s\n",  
+            printf("_______________________\n");
+            printf("名字：%s\n电话：%s\n家庭电话：%s\n办公电话：%s\n邮件：%s\n分组：%s\n",  
             mem[num_find].name, mem[num_find].phonenum,  
             mem[num_find].home_phonenum, mem[num_find].office_phonenum,  
             mem[num_find].email, mem[num_find].group);
@@ -222,7 +239,8 @@ int fun_in_find(char str[])
         }
         if(strstr(mem[num_find].phonenum,str)!=0)
         {
-            printf("%s\n%s\n%s\n%s\n%s\n%s\n",    
+            printf("_______________________\n");
+            printf("名字：%s\n电话：%s\n家庭电话：%s\n办公电话：%s\n邮件：%s\n分组：%s\n",  
             mem[num_find].name, mem[num_find].phonenum,  
             mem[num_find].home_phonenum, mem[num_find].office_phonenum,  
             mem[num_find].email, mem[num_find].group);  
@@ -231,7 +249,8 @@ int fun_in_find(char str[])
         }
         if(strstr(mem[num_find].home_phonenum,str)!=0)
         {
-            printf("%s\n%s\n%s\n%s\n%s\n%s\n",   
+            printf("_______________________\n");
+            printf("名字：%s\n电话：%s\n家庭电话：%s\n办公电话：%s\n邮件：%s\n分组：%s\n",
             mem[num_find].name, mem[num_find].phonenum,  
             mem[num_find].home_phonenum, mem[num_find].office_phonenum,  
             mem[num_find].email, mem[num_find].group);  
@@ -240,7 +259,8 @@ int fun_in_find(char str[])
         }
         if(strstr(mem[num_find].office_phonenum,str)!=0)
         {
-            printf("%s\n%s\n%s\n%s\n%s\n%s\n",  
+            printf("_______________________\n");
+            printf("名字：%s\n电话：%s\n家庭电话：%s\n办公电话：%s\n邮件：%s\n分组：%s\n", 
             mem[num_find].name, mem[num_find].phonenum,  
             mem[num_find].home_phonenum, mem[num_find].office_phonenum,  
             mem[num_find].email, mem[num_find].group); 
@@ -249,7 +269,8 @@ int fun_in_find(char str[])
         }
         if(strstr(mem[num_find].email,str)!=0)
         {
-            printf("%s\n%s\n%s\n%s\n%s\n%s\n",  
+            printf("_______________________\n");
+            printf("名字：%s\n电话：%s\n家庭电话：%s\n办公电话：%s\n邮件：%s\n分组：%s\n",  
             mem[num_find].name, mem[num_find].phonenum,  
             mem[num_find].home_phonenum, mem[num_find].office_phonenum,  
             mem[num_find].email, mem[num_find].group);  
@@ -258,8 +279,9 @@ int fun_in_find(char str[])
         }
         if(strstr(mem[num_find].group,str)!=0)
         {
-            printf("%s\n%s\n%s\n%s\n%s\n%s\n"  
-            ,mem[num_find].name, mem[num_find].phonenum,  
+            printf("_______________________\n");
+            printf("名字：%s\n电话：%s\n家庭电话：%s\n办公电话：%s\n邮件：%s\n分组：%s\n",  
+            mem[num_find].name, mem[num_find].phonenum,  
             mem[num_find].home_phonenum, mem[num_find].office_phonenum,  
             mem[num_find].email, mem[num_find].group);  
             k=1;
@@ -275,28 +297,21 @@ int fun_in_find(char str[])
             strcpy(mem_find[n].email,mem[num_find].home_phonenum);
             strcpy(mem_find[n].group,mem[num_find].office_phonenum);
             mem_num=num_find;
-            strcpy(call_phone,mem[num_find].phonenum);
-            strcpy(call_home_phone,mem[num_find].home_phonenum);
-            strcpy(call_office_phone,mem[num_find].office_phonenum);
             mem_find_num++;
             
         }
     }
-    //if()
-
-    
     return mem_find_num;
 }
+
 void fun_find()
 {
-
-    
     system("cls");
     char str[10];
 
     printf("输入你要查找的信息\n");
     scanf("%s",str);
-    printf("%s",str);
+    // printf("%s",str);
     getchar();
     fun_in_find(str);
     
@@ -305,35 +320,108 @@ void fun_find()
     getchar();
 }
 
-
-
 void fun_add(void)
 {
-    struct member mem_add;
+    int ph=0;
+    struct member mem_add=
+    {
+        .name={"null"},
+        .phonenum={"null"},
+        .home_phonenum={"null"},
+        .office_phonenum={"null"},
+        .email={"null"},
+        .group={"未知"}
+    };
+    system("cls");
     printf("请输入你要保存的信息,输入完毕之后点击回车\n");
     printf("姓名：________\b\b\b\b\b\b\b\b");
     scanf("%s",mem_add.name);
     getchar();
-    printf("电话号码：________\b\b\b\b\b\b\b\b");
-    scanf("%s",mem_add.phonenum);
-    getchar();
-    printf("家庭号码：________\b\b\b\b\b\b\b\b");
-    scanf("%s",mem_add.home_phonenum);
-    getchar();
-    printf("办公号码：________\b\b\b\b\b\b\b\b");
-    scanf("%s",mem_add.office_phonenum);
-    getchar();
-    printf("邮件：________\b\b\b\b\b\b\b\b");
-    scanf("%s",mem_add.email);
-    getchar();
-    printf("分组：________\b\b\b\b\b\b\b\b");
-    scanf("%s",mem_add.group);
-    getchar();
-    number++;
-    printf("输入完毕，按a键继续");
-   
-    //将数据输入到结构体变量中
 
+    add:
+    printf("电话号码：________\b\b\b\b\b\b\b\b");
+    printf("是否填写？(y/n)\n");
+    if(getchar()=='y')
+    {
+        getchar();
+        printf("请输入  ");
+        scanf("%s",mem_add.phonenum);
+        getchar();
+        ph++;
+    }
+    else
+    {
+        getchar();
+    }
+
+    printf("家庭号码：________\b\b\b\b\b\b\b\b");
+    printf("是否填写？(y/n)\n");
+    if(getchar()=='y')
+    {
+        getchar();
+        printf("请输入  ");
+        scanf("%s",mem_add.home_phonenum);
+        getchar();
+        ph++;
+    }
+    else
+    {
+        getchar();
+    }
+
+    printf("办公号码：________\b\b\b\b\b\b\b\b");
+    printf("是否填写？(y/n)\n");
+    if(getchar()=='y')
+    {
+        getchar();
+        printf("请输入  ");
+        scanf("%s",mem_add.office_phonenum);
+        getchar();
+        ph++;
+    }
+    else
+    {
+        getchar();
+    }
+    
+    if(ph==0)
+    {
+        printf("必须输入至少一条号码，请重新填写");
+        goto add;
+    }
+
+    printf("邮件：________\b\b\b\b\b\b\b\b");
+    printf("是否填写？(y/n)\n");
+    if(getchar()=='y')
+    {
+        getchar();
+        printf("请输入  ");
+        scanf("%s",mem_add.email);
+        getchar();
+        ph++;
+    }
+    else
+    {
+        getchar();
+    }
+    
+    printf("分组：________\b\b\b\b\b\b\b\b");
+    printf("是否填写？(y/n)\n");
+    if(getchar()=='y')
+    {
+        getchar();
+        printf("请输入  ");
+        scanf("%s",mem_add.group);
+        getchar();
+    }
+    else
+    {
+        getchar();
+    }
+    
+    number++;
+    
+    //将数据输入到结构体变量中
 
     FILE*fp;
     fp=fopen("D:\\dev\\phonebook\\data.txt","a+");
@@ -347,42 +435,33 @@ void fun_add(void)
         fprintf(fp,"%s\n%s\n%s\n%s\n%s\n%s\n"
         ,mem_add.name,mem_add.phonenum,mem_add.home_phonenum,mem_add.office_phonenum,mem_add.email,mem_add.group);
     }
-    if(getchar()=='a')
+    
+    fclose(fp);
+    fun_in_read();
+    printf("输入完毕，按a继续，按b回到主界面");
+    key=getchar();
+    getchar();
+    if(key=='a')
     {
         fun_add();
     }
-    
-    fclose(fp);
     //将变量写入文件中
 }
 
 void fun_recompose()
 {
+    system("cls");
     int form=0;
-    char str[10];
-    recom:
-    printf("输入你想的电话号码或联系人:_______\b\b\b\b\b");
-    scanf("%s",str);
-    getchar();
-    mem_find_num=fun_in_find(str);
-    if(mem_find_num==0)
-    {
-        printf("查找不到有关信息");
-    }
-    else if(mem_find_num==1)
-    {
+    printf("查找你要修改的对象，请输入查找信息\n");
+    fun_in_chose();
 
-        printf("请选择你要修改的选项：\n");
-        printf("1.名字2.主电话3.家庭电话4.办公电话5.邮件6.分组");
-        scanf("%d",&form);
-        getchar();
-        fun_in_recompose(form,mem_num);
-    }
-    else if(mem_find_num>=2)
-    {
-        printf("请输入更为详细的信息，以便我能确定你所拨打的对象");
-        goto recom;
-    }
+    printf("请选择你要修改的选项：\n");
+    printf("1.名字2.主电话3.家庭电话4.办公电话5.邮件6.分组\n");
+    scanf("%d",&form);
+    getchar();
+    //printf("%d%d",form,mem_num);
+    fun_in_recompose(form,mem_num);
+
     printf("输入b返回主界面，");
     key=getchar();
     getchar();
@@ -393,43 +472,49 @@ void fun_in_recompose(int form_r,int mem_num_r)
     int n=0;
     if(form_r==1)
     {
+        printf("输入该联系人的新名字");
         scanf("%s",mem[mem_num_r].name);
         getchar();
 
     }
     if(form_r==2)
     {
+        printf("输入该联系人的新主电话");
         scanf("%s",mem[mem_num_r].phonenum);
         getchar();
 
     }
     if(form_r==3)
     {
+        printf("输入该联系人的新家庭电话");
         scanf("%s",mem[mem_num_r].home_phonenum);
         getchar();
 
     }
     if(form_r==4)
     {
+        printf("输入该联系人的新办公电话");
         scanf("%s",mem[mem_num_r].office_phonenum);
         getchar();
 
     }
     if(form_r==5)
     {
+        printf("输入该联系人的新邮件");
         scanf("%s",mem[mem_num_r].email);
         getchar();
 
     }
     if(form_r==6)
     {
+        printf("输入该联系人的新分组");
         scanf("%s",mem[mem_num_r].group);
         getchar();
 
     }
 
     FILE*fp;
-    fp=fopen("D:\\dev\\phonebook\\data.txt","r+");
+    fp=fopen("D:\\dev\\phonebook\\data.txt","w");
     if(fp==0)
     {
         printf("ERROR:文件打开失败");
@@ -440,47 +525,34 @@ void fun_in_recompose(int form_r,int mem_num_r)
         fprintf(fp,"%s\n%s\n%s\n%s\n%s\n%s\n"
         ,mem[n].name,mem[n].phonenum,mem[n].home_phonenum,mem[n].office_phonenum,mem[n].email,mem[n].group);
     }
+    fun_in_read();
     fclose(fp);
 }
 
 
 void fun_delete()
 {
-        int form=0;
-    char str[10];
-    recom:
-    printf("输入你想的电话号码或联系人:_______\b\b\b\b\b");
-    scanf("%s",str);
+    int form=0;
+    fun_in_chose();
+    
+    printf("你确定要删除该用户吗?(y/n)");
+    key=getchar();
     getchar();
-    mem_find_num=fun_in_find(str);
-    if(mem_find_num==0)
-    {
-        printf("查找不到有关信息");
-    }
-    else if(mem_find_num==1)
-    {
-
-        printf("请选择你要修改的选项：\n");
-        printf("1.名字2.主电话3.家庭电话4.办公电话5.邮件6.分组");
-        scanf("%d",&form);
-        getchar();
-        fun_in_delete(form,mem_num);
-    }
-    else if(mem_find_num>=2)
-    {
-        printf("请输入更为详细的信息，以便我能确定你所拨打的对象");
-        goto recom;
-    }
+    if(key=='y')
+        {
+        fun_in_delete(mem_num);
+        fun_in_read();
+        }
     printf("输入b返回主界面，");
     key=getchar();
     getchar();
 }
 
-void fun_in_delete(int form_r,int mem_num_r)
+void fun_in_delete(int mem_num_r)
 {
     int n=0;
     FILE*fp;
-    fp=fopen("D:\\dev\\phonebook\\data.txt","r+");
+    fp=fopen("D:\\dev\\phonebook\\data.txt","w");
     if(fp==0)
     {
         printf("ERROR:文件打开失败");
