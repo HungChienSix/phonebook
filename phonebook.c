@@ -121,7 +121,7 @@ int fun_in_chose(void)
     char arr[20];
     while(1)
     {
-    printf("_____\b\b\b\b\b");
+    printf("__________\b\b\b\b\b\b\b\b\b\b");
     scanf("%s",arr);
     getchar();
     mem_find_num=fun_in_find(arr);
@@ -323,6 +323,7 @@ void fun_find()
 void fun_add(void)
 {
     int ph=0;
+    int n=0;
     struct member mem_add=
     {
         .name={"null"},
@@ -332,92 +333,195 @@ void fun_add(void)
         .email={"null"},
         .group={"未知"}
     };
+    
     system("cls");
+    back1:
     printf("请输入你要保存的信息,输入完毕之后点击回车\n");
     printf("姓名：________\b\b\b\b\b\b\b\b");
     scanf("%s",mem_add.name);
     getchar();
+    for(n=0;n<number;n++)
+    {
+        if((strstr(mem_add.name,mem[n].name))!=0)
+        {
+            printf("你输入的用户名和已存在的用户名发生重叠,按enter重写");
+            getchar();
+            goto back1;
+        }
+        if((strstr(mem[n].name,mem_add.name))!=0)
+        {
+            printf("你输入的用户名和已存在的用户名发生重叠,按enter重写");
+            getchar();
+            goto back1;
+        }
+    }
 
     add:
-    printf("电话号码：________\b\b\b\b\b\b\b\b");
+    printf("电话号码：____________\b\b\b\b\b\b\b\b\b\b\b\b");
     printf("是否填写？(y/n)\n");
-    if(getchar()=='y')
+    key=getchar();
+    getchar();
+    if(key=='y')
     {
-        getchar();
+        back2:
         printf("请输入  ");
         scanf("%s",mem_add.phonenum);
         getchar();
-        ph++;
-    }
-    else
+        ph=1;
+    
+    for(n=0;n<number;n++)
     {
-        getchar();
+        if((strcmp(mem_add.phonenum,mem[n].phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back2;
+        }
+    }
+    for(n=0;n<number;n++)
+    {
+        if((mem_add.phonenum,mem[n].home_phonenum)==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back2;
+        }
+    }
+    for(n=0;n<number;n++)
+    {
+        if((strcmp(mem_add.phonenum,mem[n].office_phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back2;
+        }
+    }
     }
 
-    printf("家庭号码：________\b\b\b\b\b\b\b\b");
+   
+    printf("家庭号码：____________\b\b\b\b\b\b\b\b\b\b\b\b");
     printf("是否填写？(y/n)\n");
-    if(getchar()=='y')
+    key=getchar();
+    getchar();
+    if(key=='y')
     {
-        getchar();
+        back3:
         printf("请输入  ");
         scanf("%s",mem_add.home_phonenum);
         getchar();
-        ph++;
-    }
-    else
+        ph=1;
+    
+    for(n=0;n<number;n++)
     {
-        getchar();
+        if((strcmp(mem_add.home_phonenum,mem[n].phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back3;
+        }
+    }
+    for(n=0;n<number;n++)
+    {
+        if((strcmp(mem_add.home_phonenum,mem[n].home_phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back3;
+        }
+    }
+    for(n=0;n<number;n++)
+    {
+        if((strcmp(mem_add.home_phonenum,mem[n].office_phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back3;
+        }
+    }
     }
 
-    printf("办公号码：________\b\b\b\b\b\b\b\b");
+    printf("办公号码：____________\b\b\b\b\b\b\b\b\b\b\b\b");
     printf("是否填写？(y/n)\n");
-    if(getchar()=='y')
+    key=getchar();
+    getchar();
+    if(key=='y')
     {
-        getchar();
+         back4:
         printf("请输入  ");
         scanf("%s",mem_add.office_phonenum);
         getchar();
-        ph++;
-    }
-    else
-    {
-        getchar();
-    }
+        ph=1;
     
-    if(ph==0)
+        for(n=0;n<number;n++)
     {
-        printf("必须输入至少一条号码，请重新填写");
-        goto add;
+        if((strcmp(mem_add.home_phonenum,mem[n].phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back4;
+        }
+    }
+    for(n=0;n<number;n++)
+    {
+        if((strcmp(mem_add.home_phonenum,mem[n].home_phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back4;
+        }
+    }
+    for(n=0;n<number;n++)
+    {
+        if((strcmp(mem_add.home_phonenum,mem[n].office_phonenum))==0)
+        {
+            printf("你输入的电话已存在,按enter键重新输入");
+            getchar();
+            goto back4;
+        }
+    }
     }
 
-    printf("邮件：________\b\b\b\b\b\b\b\b");
-    printf("是否填写？(y/n)\n");
-    if(getchar()=='y')
+    if(ph==0)
     {
-        getchar();
+        printf("必须输入至少一条号码，请重新填写\n");
+        goto add;
+    }
+    
+
+    
+    printf("邮件：____________\b\b\b\b\b\b\b\b\b\b\b\b");
+    printf("是否填写？(y/n)\n");
+    key=getchar();
+    getchar();
+    if(key=='y')
+    {
+        back5:
         printf("请输入  ");
         scanf("%s",mem_add.email);
         getchar();
-        ph++;
-    }
-    else
+    
+    for(n=0;n<number;n++)
     {
-        getchar();
+        if((strcmp(mem_add.email,mem[n].email))==0)
+        {
+            printf("你输入的邮件已存在,按enter键重新输入");
+            getchar();
+            goto back5;
+        }
+    }
     }
     
     printf("分组：________\b\b\b\b\b\b\b\b");
     printf("是否填写？(y/n)\n");
-    if(getchar()=='y')
+    key=getchar();
+    getchar();
+    if(key=='y')
     {
-        getchar();
         printf("请输入  ");
         scanf("%s",mem_add.group);
         getchar();
     }
-    else
-    {
-        getchar();
-    }
+
     
     number++;
     
@@ -533,6 +637,7 @@ void fun_in_recompose(int form_r,int mem_num_r)
 void fun_delete()
 {
     int form=0;
+    printf("查找你要删除的对象");
     fun_in_chose();
     
     printf("你确定要删除该用户吗?(y/n)");
