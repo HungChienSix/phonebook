@@ -371,7 +371,7 @@ void fun_add(void)
     
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.phonenum,mem[n].phonenum))==0)
+        if((strstr(mem_add.phonenum,mem[n].phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -380,7 +380,7 @@ void fun_add(void)
     }
     for(n=0;n<number;n++)
     {
-        if((mem_add.phonenum,mem[n].home_phonenum)==0)
+        if(strstr(mem_add.phonenum,mem[n].home_phonenum)!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -389,7 +389,7 @@ void fun_add(void)
     }
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.phonenum,mem[n].office_phonenum))==0)
+        if((strstr(mem_add.phonenum,mem[n].office_phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -413,7 +413,7 @@ void fun_add(void)
     
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.home_phonenum,mem[n].phonenum))==0)
+        if((strstr(mem_add.home_phonenum,mem[n].phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -422,7 +422,7 @@ void fun_add(void)
     }
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.home_phonenum,mem[n].home_phonenum))==0)
+        if((strstr(mem_add.home_phonenum,mem[n].home_phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -431,7 +431,7 @@ void fun_add(void)
     }
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.home_phonenum,mem[n].office_phonenum))==0)
+        if((strstr(mem_add.home_phonenum,mem[n].office_phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -454,7 +454,7 @@ void fun_add(void)
     
         for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.home_phonenum,mem[n].phonenum))==0)
+        if((strstr(mem_add.office_phonenum,mem[n].phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -463,7 +463,7 @@ void fun_add(void)
     }
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.home_phonenum,mem[n].home_phonenum))==0)
+        if((strstr(mem_add.office_phonenum,mem[n].home_phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -472,7 +472,7 @@ void fun_add(void)
     }
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.home_phonenum,mem[n].office_phonenum))==0)
+        if((strstr(mem_add.office_phonenum,mem[n].office_phonenum))!=0)
         {
             printf("你输入的电话已存在,按enter键重新输入");
             getchar();
@@ -502,7 +502,7 @@ void fun_add(void)
     
     for(n=0;n<number;n++)
     {
-        if((strcmp(mem_add.email,mem[n].email))==0)
+        if((strstr(mem_add.email,mem[n].email))!=0)
         {
             printf("你输入的邮件已存在,按enter键重新输入");
             getchar();
